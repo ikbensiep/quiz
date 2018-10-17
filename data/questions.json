@@ -1,0 +1,84 @@
+{
+    "title": "Knowledge Base Training Game",
+    "modules": [
+        {
+            "title": "Popcult popquiz",
+            "scenario": "Let's say you've got a problem, and no-one else can help",
+            "icon": "person",
+            "media": "../media/customer-care-video.mp4",
+            "learn_more": "http://",
+            "questions": [
+                {
+                    "prompt": "Maybe you should call...",
+                    "responses": [
+                        {"text": "The A-team","correct": true}, 
+                        {"text": "Batman"},
+                        {"text": "McGyver"},
+                        {"text": "El Barto"}
+                    ],
+                    "hints": ["A team of highly trained commandos", "Escaped prison in 1978", "Love it when plans come together"],
+                    "hint_value": 50,
+                    "points": 1500
+                },
+                {
+                    "prompt": "Who you gonna call?",
+                    "responses": [
+                        {"text": "The A-team"}, 
+                        {"text": "Ghost busters", "correct": true},
+                        {"text": "Justice Friends"},
+                        {"text": "The Turtles"}
+                    ],
+                    "hints": ["Slimer", "Don't cross the streams", "Film"],
+                    "hint_value": 50,
+                    "points": 1500
+                }, 
+                {
+                    "prompt": "You can call me",
+                    "responses": [
+                        {"text": "Al", "correct": true}, 
+                        {"text": "anytime"},
+                        {"text": "Joe"}
+                    ],
+                    "hints": ["Simon and Garfunkel", "Graceland", "MTV Video Music Award (Best Male Video)"],
+                    "hint_value": 100,
+                    "points": 2500
+                },
+                {
+                    "prompt": "Who is always right?",
+                    "responses": [
+                        {"text": "The customer", "correct": true}, 
+                        {"text": "The king"},
+                        {"text": "I am"}
+                    ],
+                    "hints": ["Think of this as 'Not you'.", "Who are you speaking to?", "Cmon son"],
+                    "hint_value": 100,
+                    "points": 2500
+                }
+            ]
+        }, 
+        {
+            "title": "Serious Biz",
+            "icon": "account_balance"
+        },
+        {
+            "title": "Gamble",
+            "icon": "casino"
+        },
+        {
+            "title": "Parenting",
+            "icon": "child_friendly"
+        },
+        {
+            "title": "Bootyshakin",
+            "icon": "directions_walk"
+        },
+        {
+            "title": "Spark yr car",
+            "icon": "ev_station"
+        },
+        {
+            "title": "Body care",
+            "icon": "face"
+        }
+    ]
+}

@@ -1,0 +1,238 @@
+:root {
+    --brand-logo-color: #56b749;
+    --main-bg-color: #86ca67;
+    --main-bg-lite: #93cf77;
+    --button-bg-dark:#3d6855;
+    --button-bg-lite: #62995f;
+    --main-text-color: #ffffff;
+    --quiz-text-color: #999999;
+    --badge-bg-color: #e2f1d7;
+}
+
+* {
+    box-sizing: border-box
+}
+
+body {
+    padding: 0;
+    margin: 0;
+    display: -ms-grid;
+    display: grid;
+    grid-template-rows: 3em auto 5em;
+    background: var(--main-bg-color);
+    color: var(--main-text-color);
+    font-family: -apple-system, BlinkMacSystemFont, 
+        'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 
+        'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+header {
+    display: -ms-grid;
+    display: grid;
+    grid-template-columns: auto 20vw;
+    line-height: 3em;
+    background: var(--main-bg-lite);
+    box-shadow: 0 0 2px #00000033;
+}
+
+main {
+    color: var(--quiz-text-color);
+    max-width: 80vw;
+    margin: 0 auto;
+}
+
+footer {
+
+}
+
+/* UI items*/ 
+
+header h1 {
+    padding: 0 1ex;
+    margin: 0;
+}
+
+.quiz-title {
+    font-weight: 400;
+}
+
+.module-title {
+    font-weight: 200;
+}
+
+.user-info {}
+
+.avatar {
+    background: #e2f1d7;
+    border-radius: 50%;
+    display: inline-block;
+    vertical-align: middle;
+    text-align: center;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+}
+
+#modules-overview {
+    max-width: 17em;
+    display: grid;
+    grid-template-rows: 5em 5em 5em;
+    grid-template-columns: 5em 5em 5em;
+    grid-gap: 1em;
+    margin: 0 auto;
+    padding: 3em 0;
+}
+
+#modules-overview button {
+    color: white;
+    background-color: transparent;
+    min-width: 5em;
+    min-height: 5em;
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: grid;
+    grid-template-rows: 64px auto;
+}
+
+#modules-overview button.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+#modules-overview button > * {
+    pointer-events: none
+}
+
+#module-intro {
+    text-align: center;
+    font-size: large;
+    color: var(--badge-bg-color);
+}
+
+#module-questions {}
+
+
+/* question + answer UI */
+.question .prompt {
+    display: grid;
+    grid-template-columns: 64px auto;
+}
+
+.question .prompt .avatar {
+    margin: 1em auto;
+}
+
+.question .prompt blockquote {
+    margin: 1em;
+    line-height: 1.8;
+    background: white;
+    color: var(--button-bg-dark);
+    padding: 1ex;
+    border-radius: 1ex;
+    position: relative;
+}
+
+.question .prompt blockquote:after {
+    content: '';
+    display: block;
+    background: white;
+    width: 1em;
+    height: 1em;
+    transform: rotate(45deg);
+    position: absolute;
+    z-index: -1;
+    top: 0.9em;
+    left: -.5em;
+
+}
+
+/* responses */
+form { }
+
+form fieldset {
+    border: none;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    background: white;
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    line-height: 1em;
+    -webkit-appearance: unset;
+    border: none;
+    border-radius: 50%;
+    outline: none;
+    box-shadow: 0 0 0 0 transparent;
+    transition: box-shadow .1s;
+}
+
+input[type="checkbox"]:after,
+input[type="radio"]:after {
+    content: '•';
+    display: block;
+    text-align: center;
+    width: 1em;
+    height: 1em;
+    color: var(--main-bg-lite);
+    opacity: 0;
+    transition: opacity .3s .15s;
+}
+
+input[type="checkbox"]:checked,
+input[type="radio"]:checked {
+    box-shadow: 0 0 0 2px var(--brand-logo-color);
+}
+
+input[type="checkbox"]:hover:not(:checked):after,
+input[type="radio"]:hover:not(:checked):after {
+    opacity: 0.5
+}
+
+input[type="checkbox"]:checked:after,
+input[type="radio"]:checked:after {
+    opacity: 1;
+    transition: opacity .2s .05s;
+    color: var(--button-bg-dark);
+}
+
+.response fieldset.responses {
+    display: grid;
+    grid-template-rows: 3em;
+}
+
+.response fieldset.responses label {
+    padding: 1ex;
+    color: var(--main-text-color);
+    cursor: pointer;
+    transition: background .3s;
+    background: transparent;
+}
+
+.response fieldset.responses label:hover {
+    background: #ffffff33;
+}
+
+
+/* submit answer */
+
+.response fieldset.answer {
+    text-align: right;
+}
+
+form button[type="submit"] {
+    background-color: var(--button-bg-lite);
+    color: var(--main-text-color);
+    cursor: pointer;
+    padding: 1ex 1.5em;
+    font-size: large;
+    border: none;
+    transition: background .2s;
+}
+
+form button[type="submit"]:hover,
+form button[type="submit"]:focus {
+    background-color: var(--button-bg-dark);
+}
