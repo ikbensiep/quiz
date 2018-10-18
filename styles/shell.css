@@ -1,3 +1,5 @@
+@import url('animations.css');
+
 :root {
     --brand-logo-color: #56b749;
     --main-bg-color: #86ca67;
@@ -18,7 +20,7 @@ body {
     margin: 0;
     display: -ms-grid;
     display: grid;
-    grid-template-rows: 3em auto 5em;
+    grid-template-rows: 5em auto 5em;
     background: var(--main-bg-color);
     color: var(--main-text-color);
     font-family: -apple-system, BlinkMacSystemFont, 
@@ -30,9 +32,13 @@ header {
     display: -ms-grid;
     display: grid;
     grid-template-columns: auto 20vw;
-    line-height: 3em;
+    line-height: 5em;
     background: var(--main-bg-lite);
     box-shadow: 0 0 2px #00000033;
+    overflow: hidden;
+    /* text-overflow: ellipsis; */
+    /* word-break: break-all; */
+    /* overflow-wrap: break-word; */
 }
 
 main {
@@ -50,6 +56,10 @@ footer {
 header h1 {
     padding: 0 1ex;
     margin: 0;
+    text-overflow: ellipsis;
+    /* overflow-wrap: break-word; */
+    overflow: hidden;
+    white-space: nowrap;
 }
 
 .quiz-title {
@@ -92,12 +102,18 @@ header h1 {
     border: none;
     cursor: pointer;
     display: grid;
-    grid-template-rows: 64px auto;
+    /* grid-template-rows: 64px auto; */
+    background: var(--button-bg-lite);
 }
 
 #modules-overview button.disabled {
     opacity: 0.5;
     cursor: not-allowed;
+    background: var(--button-bg-lite);
+}
+
+#modules-overview button.active {
+    background: var(--button-bg-dark);
 }
 
 #modules-overview button > * {
@@ -112,11 +128,21 @@ header h1 {
 
 #module-questions {}
 
+.question {
+    opacity: 0;
+    display: none;
+    transform: translateY(1ex);
+}
+
+.question[data-current-question] {
+    display: block;
+    animation: fadein 1s forwards;
+}
 
 /* question + answer UI */
 .question .prompt {
     display: grid;
-    grid-template-columns: 64px auto;
+    grid-template-columns: 64px auto 64px;
 }
 
 .question .prompt .avatar {
@@ -144,13 +170,30 @@ header h1 {
     z-index: -1;
     top: 0.9em;
     left: -.5em;
+}
 
+.question .hints {
+    background-color: var(--button-bg-lite);
+    list-style-type: none;
+    width: auto;
+    margin: 0 80px;
+    line-height: 1.6em;
+    min-height: calc(3 * 1.6em + 2em);
+    padding: 1em;
+    border-radius: .5em;
+    color: var(--badge-bg-color);
 }
 
 /* responses */
-form { }
+.question form {margin: 1em 64px 1em;}
 
-form fieldset {
+.question form fieldset[disabled] {
+    opacity: 0.6;
+    box-shadow: inset 0 0 0 3px black;
+    pointer-events: none;
+}
+
+.question form fieldset {
     border: none;
 }
 
@@ -200,7 +243,7 @@ input[type="radio"]:checked:after {
 
 .response fieldset.responses {
     display: grid;
-    grid-template-rows: 3em;
+    /* grid-template-rows: 3em; */
 }
 
 .response fieldset.responses label {
@@ -215,14 +258,33 @@ input[type="radio"]:checked:after {
     background: #ffffff33;
 }
 
+/* bad answer */
+
+.response fieldset.responses label.error {
+    background: #fff1;
+    color: var(--button-bg-lite);
+    cursor: not-allowed;
+}
+
+.response fieldset.responses label.error input[type=radio]:after {
+    content: '×';
+    opacity: 1;
+    color: white!important;
+}
+
+.response fieldset.responses label.error input[type=radio] {
+    color: white;
+    background-color: var(--button-bg-dark);
+}
 
 /* submit answer */
 
 .response fieldset.answer {
-    text-align: right;
+    text-align: center;
 }
 
-form button[type="submit"] {
+button[type="submit"],
+button[type="button"] {
     background-color: var(--button-bg-lite);
     color: var(--main-text-color);
     cursor: pointer;
@@ -232,7 +294,9 @@ form button[type="submit"] {
     transition: background .2s;
 }
 
-form button[type="submit"]:hover,
-form button[type="submit"]:focus {
+button[type="submit"]:hover,,
+button[type="button"]:hover,
+button[type="submit"]:focus,
+button[type="button"]:focus {
     background-color: var(--button-bg-dark);
 }

@@ -16,27 +16,34 @@
         </h1>
         <div id="user-info">
             <span class="avatar">🤖</span>
-            <span class="score">100</span>
+            <span class="score">0</span>
         </div>
     </header>
     <main>
         <section id="dashboard"></section>
         <section id="modules-overview"></section>
         <section id="module-content">
-            <h1 id="module-intro"></h1>
+            <section id="module-intro">
+                <h1></h1>
+                <button type="button">&nbsp;</button>
+            </section>
             <section id="module-questions"></section>
             <section id="module-score"></section>
         </section>
     </main>
-    <footer></footer>
+    <footer>
+        &copy 2018 &bull; LFO Industries
+    </footer>
     
     <article style="display:none" id="templates">
         <section class="module-questions">
                 <div class="question">
                     <div class="prompt"></div>
-                    <form class="response" action="">
+                    <ul class="hints"></ul>
+                    <form class="response" action="#">
                         <fieldset class="responses"></fieldset>
                         <fieldset class="answer">
+                            <button type="button">back</button>
                             <button type="submit">submit</button>
                         </fieldset>
                     </form>
