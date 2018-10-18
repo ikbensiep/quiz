@@ -3,7 +3,7 @@
     "modules": [
         {
             "title": "Popcult popquiz",
-            "scenario": "Let's say... ",
+            "scenario": "Let's say... \n (This page sketches a scenario for this module)",
             "icon": "person",
             "media": "../media/customer-care-video.mp4",
             "learn_more": "http://",

@@ -1,12 +1,12 @@
 const quizData = './data/questions.json';
-
 // TODO:
 // read quiz questions from localStorage. 
 // if not, fetch and store to localStorage
+
+let quizEl = document.querySelector('main');
 const modules = [];
 
 const modulesEl = document.querySelector('#modules-overview');
-const moduleEl = document.querySelector('#module-content');
 
 let currentModuleTitle = undefined;
 let currentModule = [];
@@ -26,6 +26,8 @@ fetch(quizData)
 
 
 function drawModuleOverview () {
+    quizEl.className="modules-overview";
+
     for(module of modules) {
         let btn = document.createElement('button');
         let icon = document.createElement('i');
@@ -48,25 +50,38 @@ function drawModuleOverview () {
 function selectModule (e) {
     if(e.target.classList.contains('disabled')) return false;
     
-    e.target.classList.add('active');
+    quizEl.className="module-intro";
     
+    
+    
+    const moduleButtons = document.querySelectorAll('#modules-overview button');
+    
+    moduleButtons.forEach(function(moduleButton){
+      moduleButton.classList.remove('active');
+    })
+
+    e.target.classList.add('active');
+
     currentModuleTitle = e.target.dataset.module;
+    document.querySelector('.module-title').textContent = currentModuleTitle;
+    
     currentModule = modules.find(module => {
         return module.title === currentModuleTitle;
     });
 
+
     // display module intro
-    let title = moduleEl.querySelector('#module-intro h1')
+
+    let title = document.querySelector('#module-intro h1')
     title.textContent = currentModule.scenario ? currentModule.scenario : '';
-    let button = moduleEl.querySelector('#module-intro button')
+    let button = document.querySelector('#module-intro button')
     button.textContent = 'Start';
     button.addEventListener('click', startQuizModule); // hard-code to Question 1 ?
     
 }
 
 function startQuizModule () {
-    (document.querySelector('#module-content')).classList.add('quiz');
-    document.querySelector('.module-title').textContent = currentModuleTitle;
+    quizEl.className="module-questions";
     currentQuestion = 0;
     questionPoints = [];
     displayQuestions();
@@ -95,29 +110,44 @@ function displayQuestions () {
     
 }
 
+function displayModuleScore() {
+    quizEl.className = 'module-score';
+
+    document.querySelector('#module-score .points').textContent = userScore;
+    document.querySelector('#module-score h2').textContent = 'Well done!'
+    document.querySelector('#module-score pre').textContent = currentModule.learn_more;
+}
+
 function drawQuestion () {
+
     let question = currentModule.questions[currentQuestion];
+
     let questionEl = document.querySelector('#templates .module-questions .question').cloneNode(true);
-    let responseFieldSet = questionEl.querySelector('fieldset.responses');
+
+    questionHints = [];
+    
+    console.info('drawQuestion(current), set timer');
+    questionTimer = setInterval(nextHint, 5000);
+
+    let questionEls = document.querySelectorAll('.question');
+    questionEls.forEach(el => delete el.dataset.currentQuestion);
+    questionEl.dataset.currentQuestion = 'true';
+    
 
     userScore = questionPoints.reduce((a,b) => a+b, 0);
     (document.querySelector('.score')).textContent = userScore;
 
     questionEl.querySelector('.prompt').innerHTML = `<span class="avatar">🤷</span> <blockquote>${question.prompt}</blockquote>`;
     
-    if (currentQuestion === currentQuestion) {
-        questionHints = [];
-        console.info('drawQuestion(current), set timer');
-        questionTimer = setInterval(nextHint, 5000);
-        questionEl.dataset.currentQuestion = 'true';
-    }
+    document.querySelector('#module-questions').appendChild(questionEl);    
 
+    
+    let responseForm = questionEl.querySelector('form');
+    let responseFieldSet = responseForm.querySelector('fieldset.responses');
+    
     for(response of question.responses) {
         responseFieldSet.appendChild(drawResponse(response, currentQuestion));
     }
-
-    document.querySelector('#module-questions').appendChild(questionEl);
-    let responseForm = questionEl.querySelector('form');
 
     responseForm.addEventListener('submit', handleResponseSubmit);
     responseForm.querySelector('button[type=button]').addEventListener('click', prevQuestion);
@@ -178,13 +208,14 @@ function nextHint() {
 }
 
 function nextQuestion () {
+    console.log(currentQuestion, currentModule.questions.length);
+    
     if(currentQuestion == currentModule.questions.length -1) {
-        currentQuestion++
-        drawQuestion();
-        
+        quizEl.className="module-intro";
+        displayModuleScore();
     } else {
         currentQuestion++
-        displayQuestions()
+        drawQuestion();
     }
     console.log('next question, reset timer');
     clearInterval(questionTimer);
@@ -194,9 +225,9 @@ function prevQuestion() {
     if(currentQuestion > 0) {
         currentQuestion--
     } else {
-        currentQuestion = undefined;
+        currentQuestion = 0;
     }
-    displayQuestions()
+    drawQuestion();
     console.log('prev question, reset timer');
     clearInterval(questionTimer);
 }
