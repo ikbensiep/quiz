@@ -3,8 +3,8 @@
     "modules": [
         {
             "title": "1980s",
-            "scenario": "Let's say...",
             "icon": "person",
+            "scenario": "Let's say...",
             "media": "../media/1980s.mp4",
             "learn_more": "http://wikipedia.org/wiki/1984",
             "questions": [
@@ -35,24 +35,128 @@
                 {
                     "prompt": "🎤 You can call me..",
                     "responses": [
-                        {"text": "Al", "correct": true}, 
                         {"text": "anytime"},
+                        {"text": "Al", "correct": true},
+                        {"text": "tomorrow"},
                         {"text": "Joe"}
+                        
                     ],
                     "hints": ["🎷 Simon & Garfunkel", "💿 Graceland", "🏆 MTV Video Music Award (Best Male Video)"],
                     "hint_value": 250,
                     "points": 1000
+                }, {
+                    "prompt": "In 1987, I Still Haven’t Found What I’m Looking For was U2’s first number one hit in which country?",
+                    "responses": [
+                        {"text": "Holland"},
+                        {"text": "Belgium"},
+                        {"text": "None of the above", "correct": true}
+                    ],
+                    "hints": [],
+                    "hint_value": 250,
+                    "points": 1000
+
                 }
             ]
         }, 
         
         {
-            "title": "Gamble",
-            "icon": "casino"
+            "title": "1990s",
+            "icon": "casino",
+            "scenario": "Let's say...",
+            "media": "../media/1980s.mp4",
+            "learn_more": "http://wikipedia.org/wiki/1984",
+            "questions": [
+                {
+                    "prompt": "🎮 What is the best Sims 3 expansion pack?",
+                    "responses": [
+                        {"text": "Ambitions","correct": true}, 
+                        {"text": "Seasons"},
+                        {"text": "University"},
+                        {"text": "Late Night"}
+                    ],
+                    "hints": ["🚐 A team of highly trained commandos", "🧢 Escaped prison in 1978", "🚬 Love it when plans come together"],
+                    "hint_value": 250,
+                    "points": 1000
+                },
+                {
+                    "prompt": "A hit for Boyzone in 1998, which Andrew Lloyd Webber musical featured the track No Matter What?",
+                    "responses": [
+                        {"text": "Welp"}, 
+                        {"text": "Whistle Down The Wind", "correct": true},
+                        {"text": "I dunno this one"},
+                        {"text": "Freal"}
+                    ],
+                    "hints": ["no hint. just -250 points. ouch.", "Whoopsie! Another -250!", "Everyone saw this coming."],
+                    "hint_value": 250,
+                    "points": 1000
+                }, 
+                {
+                    "prompt": "Who are Jenny Berggren, Jonas Berggren, Linn Berggren and Ulf Ekberg?",
+                    "responses": [
+                        {"text": "ABBA"}, 
+                        {"text": "Avicii"},
+                        {"text": "Ace of Base", "correct": true}
+                    ],
+                    "hints": ["All that she wants", "Is another babe", "Maybe one or two more songs."],
+                    "hint_value": 250,
+                    "points": 1000
+                },
+                {
+                    "prompt": "🚀 The 1997 film Space Jam featured which massive hit by R. Kelly?",
+                    "responses": [
+                        {"text": "Welcome to Miami"}, 
+                        {"text": "2 become 1"},
+                        {"text": "I Believe I Can Fly", "correct": true}
+                    ],
+                    "hints": ["👼 Touch my wings", "☁ In the sky", "🎶 Night and day.."],
+                    "hint_value": 250,
+                    "points": 1000
+                }
+            ]
         },
         {
-            "title": "Parenting",
-            "icon": "child_friendly"
+            "title": "2000s",
+            "icon": "child_friendly",
+            "scenario": "Post Millennials!",
+            "media": "../media/2000s.mp4",
+            "learn_more": "http://wikipedia.org/wiki/2ky",
+            "questions": [
+                {
+                    "prompt": "🎤 What was both a debut album and single for pop diva Anastacia in 2000?",
+                    "responses": [
+                        {"text": "Ambitions"}, 
+                        {"text": "Seasons"},
+                        {"text": "Not That Kind", "correct": true},
+                        {"text": "Late Night"}
+                    ],
+                    "hints": ["You're on your own", "Don't know this song", "no hint today"],
+                    "hint_value": 250,
+                    "points": 1000
+                },
+                {
+                    "prompt": "🎸 In 2007, legendary rockers Status Quo released their 28th studio album called In Search Of The what Chord?",
+                    "responses": [
+                        {"text": "Ambitions"}, 
+                        {"text": "Seasons"},
+                        {"text": "Not That Kind", "correct": true},
+                        {"text": "Late Night"}
+                    ],
+                    "hints": ["You're on your own", "Don't know this song", "no hint today"],
+                    "hint_value": 250,
+                    "points": 1000
+                },
+                {
+                    "prompt": "😝 Which American, sharing his name with a cartoon character, co-hosted the M.O.B.O. Awards with Jamelia in September 2007?",
+                    "responses": [
+                        {"text": "Ambitions"}, 
+                        {"text": "Seasons"},
+                        {"text": "Shaggy", "correct": true}
+                    ],
+                    "hints": ["It wasn't me", "It wasn't me", "IT WASN'T ME! BO! SHAGGY! YE!"],
+                    "hint_value": 250,
+                    "points": 1000
+                }
+            ]
         },
         {
             "title": "Bootyshakin",
