@@ -1,12 +1,12 @@
 {
-    "title": "Knowledge Base Training Game",
+    "title": "Pop quiz",
     "modules": [
         {
-            "title": "Popcult popquiz",
-            "scenario": "Let's say... \n (This page sketches a scenario for this module)",
+            "title": "1980s",
+            "scenario": "Let's say...",
             "icon": "person",
-            "media": "../media/customer-care-video.mp4",
-            "learn_more": "http://",
+            "media": "../media/1980s.mp4",
+            "learn_more": "http://wikipedia.org/wiki/1984",
             "questions": [
                 {
                     "prompt": "💥 You've got a problem, and no-one else can help. Maybe you should call...",
@@ -17,7 +17,7 @@
                         {"text": "El Barto"}
                     ],
                     "hints": ["🚐 A team of highly trained commandos", "🧢 Escaped prison in 1978", "🚬 Love it when plans come together"],
-                    "hint_value": 100,
+                    "hint_value": 250,
                     "points": 1000
                 },
                 {
@@ -29,7 +29,7 @@
                         {"text": "The Turtles"}
                     ],
                     "hints": ["👻 Slimer", "🔫 Don't cross the streams", "📽 Murray, Aykroyd, Weaver, Ramis"],
-                    "hint_value": 200,
+                    "hint_value": 250,
                     "points": 1000
                 }, 
                 {
@@ -42,24 +42,10 @@
                     "hints": ["🎷 Simon & Garfunkel", "💿 Graceland", "🏆 MTV Video Music Award (Best Male Video)"],
                     "hint_value": 250,
                     "points": 1000
-                },
-                {
-                    "prompt": "🛒 Who is always right?",
-                    "responses": [
-                        {"text": "The customer", "correct": true}, 
-                        {"text": "The king"},
-                        {"text": "I am"}
-                    ],
-                    "hints": ["🤔 Think of this as 'Not you'.", "📢 Who are you speaking to?", "🙄 Cmon son"],
-                    "hint_value": 300,
-                    "points": 1000
                 }
             ]
         }, 
-        {
-            "title": "Serious Biz",
-            "icon": "account_balance"
-        },
+        
         {
             "title": "Gamble",
             "icon": "casino"
@@ -77,47 +63,11 @@
             "icon": "ev_station"
         },
         {
-            "title": "Body care",
-            "scenario": "DINGEN... ",
-            "icon": "person",
+            "title": "Serious Biz",
+            "icon": "account_balance",
             "media": "../media/customer-care-video.mp4",
-            "learn_more": "http://",
+            "learn_more": "http://something.org",
             "questions": [
-                {
-                    "prompt": "💥 You've got a problem, and no-one else can help. Maybe you should call...",
-                    "responses": [
-                        {"text": "The A-team","correct": true}, 
-                        {"text": "Batman"},
-                        {"text": "McGyver"},
-                        {"text": "El Barto"}
-                    ],
-                    "hints": ["🚐 A team of highly trained commandos", "🧢 Escaped prison in 1978", "🚬 Love it when plans come together"],
-                    "hint_value": 100,
-                    "points": 1000
-                },
-                {
-                    "prompt": "☎ Who you gonna call?",
-                    "responses": [
-                        {"text": "The A-team"}, 
-                        {"text": "Ghost busters", "correct": true},
-                        {"text": "Justice Friends"},
-                        {"text": "The Turtles"}
-                    ],
-                    "hints": ["👻 Slimer", "🔫 Don't cross the streams", "📽 Murray, Aykroyd, Weaver, Ramis"],
-                    "hint_value": 200,
-                    "points": 1000
-                }, 
-                {
-                    "prompt": "🎤 You can call me..",
-                    "responses": [
-                        {"text": "Al", "correct": true}, 
-                        {"text": "anytime"},
-                        {"text": "Joe"}
-                    ],
-                    "hints": ["🎷 Simon & Garfunkel", "💿 Graceland", "🏆 MTV Video Music Award (Best Male Video)"],
-                    "hint_value": 250,
-                    "points": 1000
-                },
                 {
                     "prompt": "🛒 Who is always right?",
                     "responses": [
@@ -126,7 +76,7 @@
                         {"text": "I am"}
                     ],
                     "hints": ["🤔 Think of this as 'Not you'.", "📢 Who are you speaking to?", "🙄 Cmon son"],
-                    "hint_value": 300,
+                    "hint_value": 250,
                     "points": 1000
                 }
             ]
