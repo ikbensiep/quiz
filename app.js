@@ -3,11 +3,11 @@ const quizData = './data/questions.json';
 // read quiz questions from localStorage. 
 // if not, fetch and store to localStorage
 
-let quizEl = document.querySelector('main');
+
 const modules = [];
-
 const modulesEl = document.querySelector('#modules-overview');
-
+const moduleEl = document.querySelector('#module-intro'); 
+let quizEl = document.querySelector('main'); //FIXME
 let currentModuleTitle = undefined;
 let currentModule = [];
 let currentQuestion = undefined;
@@ -21,6 +21,7 @@ fetch(quizData)
     .then(data => {
         modules.push(...data.modules)
         quizTitle = data.title;
+        (document.querySelector('.quiz-title')).textContent = quizTitle;
         drawModuleOverview();
     });
 
@@ -52,8 +53,6 @@ function selectModule (e) {
     
     quizEl.className="module-intro";
     
-    
-    
     const moduleButtons = document.querySelectorAll('#modules-overview button');
     
     moduleButtons.forEach(function(moduleButton){
@@ -69,15 +68,13 @@ function selectModule (e) {
         return module.title === currentModuleTitle;
     });
 
-
     // display module intro
-
-    let title = document.querySelector('#module-intro h1')
-    title.textContent = currentModule.scenario ? currentModule.scenario : '';
+    moduleEl.querySelector('h1').textContent = currentModule.scenario ? currentModule.scenario : '';
+    moduleEl.querySelector('figure').innerHTML = currentModule.media;
+    
     let button = document.querySelector('#module-intro button')
     button.textContent = 'Start';
-    button.addEventListener('click', startQuizModule); // hard-code to Question 1 ?
-    
+    button.addEventListener('click', startQuizModule); // hard-code to Question 1 ?    
 }
 
 function startQuizModule () {
@@ -113,32 +110,32 @@ function displayQuestions () {
 function displayModuleScore() {
     quizEl.className = 'module-score';
 
-    document.querySelector('#module-score .points').textContent = userScore;
-    document.querySelector('#module-score h2').textContent = 'Well done!'
-    document.querySelector('#module-score pre').textContent = currentModule.learn_more;
+    let availablePoints = [];
+    currentModule.questions.forEach(q => availablePoints.push(q.points));
+    availablePoints = availablePoints.reduce((a,b) => a+b, 0);
+
+    
+
+    let scoreBoard = document.querySelector('#module-score');
+    scoreBoard.querySelector('.points').textContent = userScore;
+    scoreBoard.querySelector('h2').textContent = `That's ${(userScore / availablePoints) * 100}% 
+     ${((userScore / availablePoints) * 100) > 75 ? '🤩 Well done!' : '🤨 Could do better..'}`;
+    scoreBoard.querySelector('pre').textContent = currentModule.learn_more;
+    var backbutton = scoreBoard.querySelector('button');
+    backbutton.addEventListener('click', function(){quizEl.className = 'modules-overview'});
 }
 
 function drawQuestion () {
 
     let question = currentModule.questions[currentQuestion];
-
     let questionEl = document.querySelector('#templates .module-questions .question').cloneNode(true);
-
-    questionHints = [];
-    
-    console.info('drawQuestion(current), set timer');
-    questionTimer = setInterval(nextHint, 5000);
-
     let questionEls = document.querySelectorAll('.question');
     questionEls.forEach(el => delete el.dataset.currentQuestion);
     questionEl.dataset.currentQuestion = 'true';
-    
 
-    userScore = questionPoints.reduce((a,b) => a+b, 0);
-    (document.querySelector('.score')).textContent = userScore;
-
+    questionHints = [];
+    questionTimer = setInterval(function(){ nextHint()}, 5000);
     questionEl.querySelector('.prompt').innerHTML = `<span class="avatar">🤷</span> <blockquote>${question.prompt}</blockquote>`;
-    
     document.querySelector('#module-questions').appendChild(questionEl);    
 
     
@@ -166,14 +163,15 @@ function handleResponseSubmit(e) {
     let answer = e.target.querySelector('input[type=radio]:checked');
     let points;
 
+    points = currentModule.questions[currentQuestion].points - (currentModule.questions[currentQuestion].hint_value * questionHints.length);
+    awardRemainingPoints(points);
+
     if (!answer) {
         
     } else {
         // TODO: save actual response and calculate score every time
         let correctAnswer = currentModule.questions[currentQuestion].responses.find( item => item.correct)
         if (correctAnswer.text === answer.value) {
-            points = currentModule.questions[currentQuestion].points - (currentModule.questions[currentQuestion].hint_value * questionHints.length);
-            awardRemainingPoints(points);
             nextQuestion();
         } else {   
             answer.parentNode.classList.add('error');
@@ -184,32 +182,28 @@ function handleResponseSubmit(e) {
 
 function awardRemainingPoints(points) {
     questionPoints[currentQuestion] = points;
+    userScore = questionPoints.reduce((a,b) => a+b, 0);
+    (document.querySelector('.score')).textContent = userScore;
 }
 
 function nextHint() {
-    
     if (currentModule.questions[currentQuestion] && questionHints.length < currentModule.questions[currentQuestion].hints.length) {
         questionHints.push(currentModule.questions[currentQuestion].hints[questionHints.length]);
-        console.info('hint');
     } else {
-        console.warn('no more hints');
-        console.log('reset timer')
         clearInterval(questionTimer);
     }
     
     // brrr
     var hints = ''; 
-    questionHints.forEach(item => {
-        hints += `<li>${item}</li>`;
-    });
+    questionHints.forEach(item => { hints += `<li>${item}</li>` });
 
     (document.querySelector('[data-current-question=true] ul'))
         .innerHTML = `${hints}`;
 }
 
 function nextQuestion () {
-    console.log(currentQuestion, currentModule.questions.length);
     
+    clearInterval(questionTimer);
     if(currentQuestion == currentModule.questions.length -1) {
         quizEl.className="module-intro";
         displayModuleScore();
@@ -217,8 +211,7 @@ function nextQuestion () {
         currentQuestion++
         drawQuestion();
     }
-    console.log('next question, reset timer');
-    clearInterval(questionTimer);
+    
 }
 
 function prevQuestion() {
@@ -227,7 +220,7 @@ function prevQuestion() {
     } else {
         currentQuestion = 0;
     }
-    drawQuestion();
-    console.log('prev question, reset timer');
     clearInterval(questionTimer);
+    drawQuestion();
+    
 }
