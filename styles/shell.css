@@ -15,12 +15,18 @@
     box-sizing: border-box
 }
 
+@media (handheld orientation: portrait) {
+    body {
+        font-size: 12px;
+    }
+}
+
 body {
     padding: 0;
     margin: 0;
     display: -ms-grid;
     display: grid;
-    grid-template-rows: 5em auto 5em;
+    grid-template-rows: 5em calc(100vh - 10em) 5em;
     background: var(--main-bg-color);
     color: var(--main-text-color);
     font-family: -apple-system, BlinkMacSystemFont, 
@@ -31,27 +37,75 @@ body {
 header {
     display: -ms-grid;
     display: grid;
-    grid-template-columns: auto 20vw;
+    grid-template-columns: auto 30vw;
     line-height: 5em;
     background: var(--main-bg-lite);
     box-shadow: 0 0 2px #00000033;
     overflow: hidden;
     /* text-overflow: ellipsis; */
     /* word-break: break-all; */
+    text-align: center;
     /* overflow-wrap: break-word; */
 }
 
 main {
     color: var(--quiz-text-color);
-    max-width: 80vw;
+    min-width: 70vw;
+    max-width: 98vw;
     margin: 0 auto;
 }
 
 footer {
+    text-align: center;
+    line-height: 5em;
+    color: var(--badge-bg-color);
+    font-weight: 100;
+    font-size: smaller;
+}
 
+span.material-icons {
+    vertical-align: middle;
+}
+
+/* UI switch */
+/* !important statements here are necessary to enforce style rule importance */
+
+.modules-overview #modules-overview,
+.module-intro #module-intro,
+.module-questions #module-questions,
+.module-score #module-score  {
+    display: grid!important;
+    opacity: 1;
+    transform: translateX(0); 
+}
+
+main section {
+    opacity: 0;
+    display: none!important;
+    transform: translateX(1em); 
+    transition: all .5s;
 }
 
 /* UI items*/ 
+
+button[type="submit"],
+button[type="button"] {
+    background-color: var(--button-bg-lite);
+    color: var(--main-text-color);
+    cursor: pointer;
+    padding: 1ex 1.5em;
+    font-size: large;
+    font-weight: 400;
+    border: none;
+    transition: background .2s;
+}
+
+button[type="submit"]:hover,
+button[type="button"]:hover,
+button[type="submit"]:focus,
+button[type="button"]:focus {
+    background-color: var(--button-bg-dark);
+}
 
 header h1 {
     padding: 0 1ex;
@@ -60,6 +114,7 @@ header h1 {
     /* overflow-wrap: break-word; */
     overflow: hidden;
     white-space: nowrap;
+    text-align: left;
 }
 
 .quiz-title {
@@ -95,6 +150,7 @@ header h1 {
 
 #modules-overview button {
     color: white;
+    font-weight: 300;
     background-color: transparent;
     min-width: 5em;
     min-height: 5em;
@@ -139,7 +195,29 @@ header h1 {
     animation: fadein 1s forwards;
 }
 
-/* question + answer UI */
+/* question UI */
+.question .timer {
+    border-radius: .5em;
+    height: .3em;
+    background-color: var(--badge-bg-color);
+    margin: 1ex 80px 2ex;
+    position: relative;
+    overflow: hidden;
+}
+
+.question .timer:after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--button-bg-dark);
+    animation: timer 20s .5s linear forwards;
+    transform-origin: left;
+
+}
+
 .question .prompt {
     display: grid;
     grid-template-columns: 64px auto 64px;
@@ -184,6 +262,13 @@ header h1 {
     color: var(--badge-bg-color);
 }
 
+.question .hints:before {
+    content: 'hints';
+    font-size: .5em;
+    text-transform: uppercase;
+    position: absolute;
+    margin-top: -2em;
+}
 /* responses */
 .question form {margin: 1em 64px 1em;}
 
@@ -252,6 +337,7 @@ input[type="radio"]:checked:after {
     cursor: pointer;
     transition: background .3s;
     background: transparent;
+    border-radius: 0.5em;
 }
 
 .response fieldset.responses label:hover {
@@ -283,20 +369,22 @@ input[type="radio"]:checked:after {
     text-align: center;
 }
 
-button[type="submit"],
-button[type="button"] {
-    background-color: var(--button-bg-lite);
-    color: var(--main-text-color);
-    cursor: pointer;
-    padding: 1ex 1.5em;
-    font-size: large;
-    border: none;
-    transition: background .2s;
+/* module scoreboard*/
+#module-score {
+    display: grid;
+    min-height: calc(100vh - 8em);
+    text-align: center;
+    color: white;
+    grid-template-rows: 6em 6em 3em 3em;
+    align-items: center;
 }
 
-button[type="submit"]:hover,,
-button[type="button"]:hover,
-button[type="submit"]:focus,
-button[type="button"]:focus {
-    background-color: var(--button-bg-dark);
+#module-score h1 {font-weight: 200;}
+
+#module-score h1 strong {
+    display: block;
+    line-height: 0.7;
+    font-size: 3em;
+    letter-spacing: -.15ex;
+    color: var(--button-bg-dark);
 }
