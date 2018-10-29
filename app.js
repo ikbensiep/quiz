@@ -16,15 +16,42 @@ let questionPoints = [];
 let questionHints = [];
 let userScore = 0;
 
-fetch(quizData)
-    .then(blob => blob.json())
-    .then(data => {
-        modules.push(...data.modules)
-        quizTitle = data.title;
-        (document.querySelector('.quiz-title')).textContent = quizTitle;
-        drawModuleOverview();
-    });
+// PHASE 1:
+// fetch quiz data,
+// add to modules
+// draw module overview to
+// kick things off
 
+// fetch(quizData)
+//     .then(blob => blob.json())
+//     .then(data => {
+//         modules.push(...data.modules)
+//         quizTitle = data.title;
+//         (document.querySelector('.quiz-title')).textContent = quizTitle;
+//         drawModuleOverview();
+//     });
+
+function httpGet(url, callback) {
+    var xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = function () {
+        console.log(xhr.readyState, xhr.status);
+        if(xhr.readyState === 4 && xhr.status === 200) {
+            callback(xhr.responseText);
+        }
+    }
+    xhr.open("GET", url, true)
+    xhr.send(null);
+}
+
+httpGet(quizData, function(data){
+    data = JSON.parse(data);
+    modules.push(...data.modules);
+    quizTitle = data.title;
+    
+    // dit kan chiquer..
+    (document.querySelector('.quiz-title')).textContent = quizTitle;
+    drawModuleOverview();
+});
 
 function drawModuleOverview () {
     quizEl.className="modules-overview";
