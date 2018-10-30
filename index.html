@@ -14,9 +14,15 @@
             <span class="quiz-title"></span>
             <span class="module-title"></span>
         </h1>
-        <div id="user-info">
+        <div class="user-info">
             <span class="avatar">🤖</span>
             <span class="score">0</span>
+            <label for="toggle-sound-fx">
+                <input type="checkbox" id="toggle-sound-fx">
+                <i class="material-icons">volume_up</i>
+                <i class="material-icons">volume_off</i>
+                <input type="range" min="0" max="100" value="100" step="10" class="sound-fx-volume">
+            </label>
         </div>
     </header>
     <main>
@@ -38,7 +44,9 @@
                 <button type="button"><span class="material-icons">grid_on</span> modules</button>
             </div>
         </section>
-        
+        <audio class="click" src="data/click.mp3"></audio>
+        <audio class="error" src="data/error.mp3"></audio>
+        <audio class="score" src="data/score.mp3"></audio>
     </main>
     <footer>
         &copy 2018 &bull; LFO Industries
@@ -46,20 +54,23 @@
     
     <article style="display:none" id="templates">
         <section class="module-questions">
-                <div class="question">
-                    <div class="prompt"></div>
-                    <div class="timer"></div>
-                    <ul class="hints"></ul>
-                    <form class="response" action="#">
-                        <fieldset class="responses"></fieldset>
-                        <fieldset class="answer">
-                            <button type="button">back</button>
-                            <button type="submit">submit</button>
-                        </fieldset>
-                    </form>
-                </div>
-            </section>
-    </section>
+            <div class="question">
+                <div class="timer"></div>
+                <div class="prompt"></div>
+                
+                <form class="response" action="#">
+                    <fieldset class="responses"></fieldset>
+                    <fieldset class="answer">
+                        <button type="button">back</button>
+                        <button type="submit">submit</button>
+                    </fieldset>
+                </form>
+                
+                <ul class="hints"></ul>
+
+            </div>
+        </section>
+    </article>
     <script src="app.js"></script>
 </body>
 </html>

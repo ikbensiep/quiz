@@ -56,23 +56,24 @@ header {
 
 main {
     color: var(--quiz-text-color);
-    min-width: 70vw;
-    max-width: 98vw;
+    width: 100vw;
+    max-width: 100vw;
     margin: 0 auto;
     overflow: auto;
+    box-shadow: 0 3px 4px #00000033;
 }
 
 footer {
     text-align: center;
     line-height: 5em;
     color: var(--badge-bg-color);
-    background: var(--main-bg-lite);
-    box-shadow: 0 0 2px #00000033;
+    background: var(--button-bg-dark);
     font-weight: 300;
     font-size: small;
+    z-index: -1;
 }
 
-span.material-icons {
+.material-icons {
     vertical-align: middle;
 }
 
@@ -93,6 +94,7 @@ main section {
     display: none!important;
     transform: translateX(1em); 
     transition: all .5s;
+    margin: 0 5em;
 }
 
 /* UI items*/ 
@@ -107,6 +109,8 @@ button[type="button"] {
     font-weight: 400;
     border: none;
     transition: background .2s;
+    max-width: 10em;
+    margin: auto;
 }
 
 button[type="submit"]:hover,
@@ -134,7 +138,8 @@ header h1 {
     font-weight: 200;
 }
 
-.user-info {}
+.user-info {
+}
 
 .avatar {
     background: #e2f1d7;
@@ -146,6 +151,25 @@ header h1 {
     height: 2em;
     line-height: 2;
 }
+
+.user-info label[for="toggle-sound-fx"] {cursor: pointer;}
+.user-info label[for="toggle-sound-fx"] input[type="checkbox"] { visibility: hidden; }
+.user-info label[for="toggle-sound-fx"] input + i { display: none }
+.user-info label[for="toggle-sound-fx"] input + i + i {display: initial}
+.user-info label[for="toggle-sound-fx"] input:checked + i {display: initial}
+.user-info label[for="toggle-sound-fx"] input:checked + i + i {display: none}
+
+.user-info label[for="toggle-sound-fx"] input[type="range"] {
+    width: 60px;
+    vertical-align: middle;
+    transition: all .2s;
+    background: transparent;
+    outline: none;
+    box-shadow: none;
+}
+
+.user-info label[for="toggle-sound-fx"] input ~ input { opacity: 0; pointer-events: none; }
+.user-info label[for="toggle-sound-fx"] input:checked ~ input { opacity: 1; pointer-events: initial}
 
 #modules-overview {
     max-width: 17em;
@@ -207,25 +231,26 @@ header h1 {
 
 /* question UI */
 .question .timer {
-    border-radius: .5em;
-    height: .3em;
+    border-radius: 1em;
+    height: 2em;
     background-color: var(--badge-bg-color);
-    margin: 1ex 82px 2ex;
+    margin: 1ex 6em 2ex;
     position: relative;
     overflow: hidden;
 }
 
 .question .timer:after {
+    border-radius: inherit;
     content: '';
     position: absolute;
     left: 0;
     top: 0;
     right: 0;
     bottom: 0;
-    background-color: var(--button-bg-dark);
+    background-color: var(--main-text-color);
     animation: timer 20s .5s linear forwards;
     transform-origin: left;
-    opacity: 0;
+    opacity: 0.5;
 }
 
 .question .prompt {
@@ -266,7 +291,7 @@ header h1 {
     background-color: var(--button-bg-lite);
     list-style-type: none;
     width: auto;
-    margin: 0 80px;
+    margin: 0 6em;
     line-height: 1.6em;
     min-height: calc(3 * 1.6em + 2em);
     padding: 1em;
@@ -282,7 +307,7 @@ header h1 {
     margin-top: -2em;
 }
 /* responses */
-.question form {margin: 1em 64px 1em;}
+.question form {margin: 1em 6em 1em;}
 
 .question form fieldset[disabled] {
     opacity: 0.6;
@@ -292,8 +317,19 @@ header h1 {
 
 .question form fieldset {
     border: none;
+    padding: 1em;
+    margin: 0;
 }
-
+input[type="text"] {
+    background: white;
+    border: none;
+    width: 100%;
+    font-size: large;
+    color: var(--button-bg-dark);
+    padding: 1ex;
+    border-radius: .5ex;
+        
+}
 input[type="checkbox"],
 input[type="radio"] {
     background: white;
@@ -307,6 +343,12 @@ input[type="radio"] {
     outline: none;
     box-shadow: 0 0 0 0 transparent;
     transition: box-shadow .1s;
+    margin: 2ex;
+}
+
+input:focus {
+    background: white;
+    box-shadow: 0 0 0 2px var(--button-bg-dark);
 }
 
 input[type="checkbox"]:after,
@@ -323,7 +365,7 @@ input[type="radio"]:after {
 
 input[type="checkbox"]:checked,
 input[type="radio"]:checked {
-    box-shadow: 0 0 0 2px var(--brand-logo-color);
+    box-shadow: 0 0 0 2px var(--button-bg-lite);
 }
 
 input[type="checkbox"]:hover:not(:checked):after,
@@ -338,13 +380,21 @@ input[type="radio"]:checked:after {
     color: var(--button-bg-dark);
 }
 
-.response fieldset.responses {
+input[type="checkbox"]{
+    border-radius: 5%;
+}
+
+input[type="checkbox"]:after{
+    content: '✓';
+}
+
+.response fieldset.responses div {
     display: grid;
     /* grid-template-rows: 3em; */
 }
 
 .response fieldset.responses label {
-    padding: 1ex;
+    /*! padding: 1ex; */
     color: var(--main-text-color);
     cursor: pointer;
     transition: background .3s;
@@ -353,8 +403,9 @@ input[type="radio"]:checked:after {
     user-select: none;
 }
 
-.response fieldset.responses label:hover {
-    background: #ffffff33;
+.response fieldset.responses label:hover,
+.response fieldset.responses label:focus {
+    background: #ffffff55;
 }
 
 /* bad answer */
@@ -365,15 +416,32 @@ input[type="radio"]:checked:after {
     cursor: not-allowed;
 }
 
+.response fieldset.responses label.error input[type="text"] {
+    /*! color: red; */
+    box-shadow: inset 0 0 0 2px var(--button-bg-lite);
+    background: rgba(255,255,255,.5);
+}
+.response fieldset.responses label.error input[type=checkbox]:after,
 .response fieldset.responses label.error input[type=radio]:after {
     content: '×';
     opacity: 1;
     color: white!important;
 }
 
+.response fieldset.responses label.error input[type=checkbox],
 .response fieldset.responses label.error input[type=radio] {
     color: white;
-    background-color: var(--button-bg-dark);
+    background-color: var(--button-bg-lite);
+}
+.response fieldset.responses label .feedback {
+    display: none;
+}
+.response fieldset.responses label.error .feedback:not(:empty) {
+    display: block;
+    margin: .5em 1em 1em 0.8em;
+    background: white;
+    padding: .5em;
+    border-radius: .3ex;
 }
 
 /* submit answer */

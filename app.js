@@ -15,21 +15,12 @@ let questionTimer = undefined;
 let questionPoints = [];
 let questionHints = [];
 let userScore = 0;
+let soundFXEnabled = false;
 
 // PHASE 1:
 // fetch quiz data,
-// add to modules
-// draw module overview to
-// kick things off
-
-// fetch(quizData)
-//     .then(blob => blob.json())
-//     .then(data => {
-//         modules.push(...data.modules)
-//         quizTitle = data.title;
-//         (document.querySelector('.quiz-title')).textContent = quizTitle;
-//         drawModuleOverview();
-//     });
+// add to modules[]
+// draw module overview to kick things off
 
 function httpGet(url, callback) {
     var xhr = new XMLHttpRequest();
@@ -46,9 +37,11 @@ function httpGet(url, callback) {
 httpGet(quizData, function(data){
     data = JSON.parse(data);
     modules.push(...data.modules);
-    quizTitle = data.title;
+    
+    //TODO: shuffle questions order in drawModuleQuestions or right
     
     // dit kan chiquer..
+    quizTitle = data.title;
     (document.querySelector('.quiz-title')).textContent = quizTitle;
     drawModuleOverview();
 });
@@ -166,44 +159,103 @@ function drawQuestion () {
     document.querySelector('#module-questions').appendChild(questionEl);    
 
     
+
     let responseForm = questionEl.querySelector('form');
     let responseFieldSet = responseForm.querySelector('fieldset.responses');
-    
-    for(response of question.responses) {
-        responseFieldSet.appendChild(drawResponse(response, currentQuestion));
-    }
 
+    responseFieldSet.appendChild(drawResponse(question));
+    
     responseForm.addEventListener('submit', handleResponseSubmit);
     responseForm.querySelector('button[type=button]').addEventListener('click', prevQuestion);
+    (responseForm.querySelector('label')).focus();
 }
 
-function drawResponse (response, index) {
-    let responseLabel = document.createElement('label');
-    responseLabel.innerHTML = `<input type="radio" name="question-${index}" value="${response.text}"> ${response.text}`
-    return responseLabel;
+function drawResponse (question) {
+    
+    var output = document.createElement('div');
+    var corrects = question.responses.filter(response =>  {
+        return response.correct == true;
+    });
+
+    console.log("options: ", question.responses.length)
+    
+    console.log("correct: ", corrects);
+
+    // if only one valid response, draw text input
+    if(question.responses.length === 1) {
+        let responseLabel = document.createElement('label');
+        responseLabel.setAttribute('for', `question-${currentQuestion}-0`)
+        
+        responseLabel.innerHTML = `<input type="text" name="question-${currentQuestion}-0" value="${question.responses[0].text}"/> <span class="feedback"></span>`;
+        
+        output.appendChild(responseLabel);
+    } else {
+        let inputtype = corrects.length > 1 ?  'checkbox' : 'radio';
+        let index = 0;
+        for(response of question.responses) {
+            index++;
+            let responseLabel = document.createElement('label');
+            responseLabel.setAttribute('for', `question-${currentQuestion}-${index}`);
+            responseLabel.innerHTML = `<input type="${inputtype}" value="${response.text}" id="question-${currentQuestion}-${index}" name="question-${currentQuestion}"> ${response.text} <span class="feedback"></span>`
+            output.appendChild(responseLabel);
+        }
+    }
+    return output;
 }
 
 function handleResponseSubmit(e) {
     if(!e.isTrusted) return false;
     e.preventDefault();
+    
+    //always storing the response(s) in an array
+    let answers = [];
+    let answerInputs = e.target.querySelectorAll('input');
+    
+    let correctAnswers = currentModule.questions[currentQuestion].responses.filter( item => item.correct == true)
+    
+    answerInputs.forEach( function(input) {
+        if (input.type == 'text'){
+            answers.push(input.value)
+        } else { 
+            if(input.checked) {
+                answers.push(input.value)
+            }
+        }
+    });
 
-    let answer = e.target.querySelector('input[type=radio]:checked');
-    let points;
+    let corrects = correctAnswers.map(correct => correct.text );
+    let correctAnswer = answers.length === corrects.length && answers.every(function(value, index) { return value === corrects[index]});
+    
+    if (!correctAnswer) {
 
-    points = currentModule.questions[currentQuestion].points - (currentModule.questions[currentQuestion].hint_value * questionHints.length);
-    awardRemainingPoints(points);
+        playSound('error');
 
-    if (!answer) {
+        answerInputs.forEach(function(input, index){ 
+            if(!corrects.includes(input.value)){ 
+                
+                // only grab user-checked items; we don want to give away the answer
+                if(input.checked) {
+                    input.parentNode.className = 'error';   
+                    input.checked = false;
+                    input.disabled = "disabled";
+                    console.log(input)
+                }
+                if(input.type == 'text') {
+                    input.parentNode.className = 'error';
+                }
+                
+                let feedback = currentModule.questions[currentQuestion].responses[index].feedback;
+                    input.parentNode.querySelector('.feedback').textContent = feedback;
+            }
+        });
         
     } else {
+        playSound('score');
         // TODO: save actual response and calculate score every time
-        let correctAnswer = currentModule.questions[currentQuestion].responses.find( item => item.correct)
-        if (correctAnswer.text === answer.value) {
-            nextQuestion();
-        } else {   
-            answer.parentNode.classList.add('error');
-            answer.disabled = 'disabled';
-        }
+        let points;
+        points = currentModule.questions[currentQuestion].points - (currentModule.questions[currentQuestion].hint_value * questionHints.length);
+        awardRemainingPoints(points);
+        nextQuestion();
     }
 }
 
@@ -249,5 +301,24 @@ function prevQuestion() {
     }
     clearInterval(questionTimer);
     drawQuestion();
-    
 }
+
+function toggleSoundFX() {
+    soundFXEnabled = !soundFXEnabled;
+}
+
+function updateVolume(e) {
+    const volume = e.target.value;
+    const audios = document.querySelectorAll('audio');
+    audios.forEach(audio => audio.volume = volume/100);
+
+}
+
+function playSound(sound) {
+    if(soundFXEnabled) {
+        document.querySelector(`audio.${sound}`).play();
+    }
+}
+
+document.querySelector('#toggle-sound-fx').addEventListener('change', toggleSoundFX);
+document.querySelector('.sound-fx-volume').addEventListener('mousemove', updateVolume);

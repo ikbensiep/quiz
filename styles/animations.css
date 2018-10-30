@@ -8,9 +8,10 @@
 
 @keyframes timer {
     from {
-        transform: translateX(-101%);
+        transform: translateX(0);
         opacity: .5;
     } to {
+        transform: translateX(-101%);
         opacity: 1;
     }
 } 
