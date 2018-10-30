@@ -19,9 +19,9 @@
             <span class="score">0</span>
             <label for="toggle-sound-fx">
                 <input type="checkbox" id="toggle-sound-fx">
-                <i class="material-icons">volume_up</i>
-                <i class="material-icons">volume_off</i>
-                <input type="range" min="0" max="100" value="100" step="10" class="sound-fx-volume">
+                <i class="material-icons" title="Sound is on. Click to turn off.">volume_up</i>
+                <i class="material-icons" title="Sound is off. Click to turn on.">volume_off</i>
+                <input type="range" min="10" max="100" value="70" step="5" class="sound-fx-volume">
             </label>
         </div>
     </header>
@@ -55,7 +55,7 @@
     <article style="display:none" id="templates">
         <section class="module-questions">
             <div class="question">
-                <div class="timer"></div>
+                <div class="timer">1500</div>
                 <div class="prompt"></div>
                 
                 <form class="response" action="#">
