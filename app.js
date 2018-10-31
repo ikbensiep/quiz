@@ -3,19 +3,21 @@ const quizData = './data/questions.json';
 // read quiz questions from localStorage. 
 // if not, fetch and store to localStorage
 
-
 const modules = [];
 const modulesEl = document.querySelector('#modules-overview');
 const moduleEl = document.querySelector('#module-intro'); 
-let quizEl = document.querySelector('main'); //FIXME
+const quizEl = document.querySelector('main'); 
+
 let currentModuleTitle = undefined;
 let currentModule = [];
 let currentQuestion = undefined;
 let questionTimer = undefined;
-let questionPoints = [];
+let modulePoints = [];
+let questionPoints = 0;
 let questionHints = [];
 let userScore = 0;
-let soundFXEnabled = false;
+let scoreBoard = {};
+let soundFXEnabled = (document.querySelector('#toggle-sound-fx')).checked;
 
 // PHASE 1:
 // fetch quiz data,
@@ -25,7 +27,7 @@ let soundFXEnabled = false;
 function httpGet(url, callback) {
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange = function () {
-        console.log(xhr.readyState, xhr.status);
+        // console.log(xhr.readyState, xhr.status);
         if(xhr.readyState === 4 && xhr.status === 200) {
             callback(xhr.responseText);
         }
@@ -44,11 +46,12 @@ httpGet(quizData, function(data){
     quizTitle = data.title;
     (document.querySelector('.quiz-title')).textContent = quizTitle;
     drawModuleOverview();
+    document.body.removeAttribute('unresolved');
 });
 
 function drawModuleOverview () {
     quizEl.className="modules-overview";
-
+    modulesEl.innerHTML = '';
     for(module of modules) {
         let btn = document.createElement('button');
         let icon = document.createElement('i');
@@ -65,6 +68,16 @@ function drawModuleOverview () {
         btn.appendChild(label);
         btn.addEventListener('click', selectModule);
         modulesEl.appendChild(btn);
+
+        
+        let maxscore = 0;
+        module.questions && module.questions.forEach(question => {maxscore += question.points});
+        btn.dataset.score = scoreBoard[module.title] && scoreBoard[module.title].score.reduce((a,b) => a+b, 0) || 0;
+        btn.dataset.maxscore = maxscore;
+        btn.style.backgroundPosition = '0px '+ (Math.floor((btn.dataset.score / maxscore) * 100) ) + '%';
+        if(module.title === currentModuleTitle) {
+            btn.classList.add('scorebubble')
+        }
     }
 }
 
@@ -100,12 +113,9 @@ function selectModule (e) {
 function startQuizModule () {
     quizEl.className="module-questions";
     currentQuestion = 0;
-    questionPoints = [];
-    displayQuestions();
-    
-    questionPoints = [];
+    modulePoints = [];
     questionHints = [];
-    
+    displayQuestions();
 }
 
 function displayQuestions () {
@@ -120,29 +130,10 @@ function displayQuestions () {
     questionsContainer.dataset.currentQuestion = currentQuestion;
     questionsContainer.dataset.totalQuestions = currentModule.questions.length;
     
-    
     // display module questions one by one
     
     drawQuestion()
     
-}
-
-function displayModuleScore() {
-    quizEl.className = 'module-score';
-
-    let availablePoints = [];
-    currentModule.questions.forEach(q => availablePoints.push(q.points));
-    availablePoints = availablePoints.reduce((a,b) => a+b, 0);
-
-    
-
-    let scoreBoard = document.querySelector('#module-score');
-    scoreBoard.querySelector('.points').textContent = userScore;
-    scoreBoard.querySelector('h2').textContent = `That's ${(userScore / availablePoints) * 100}% 
-     ${((userScore / availablePoints) * 100) > 75 ? '🤩 Well done!' : '🤨 Could do better..'}`;
-    scoreBoard.querySelector('pre').textContent = currentModule.learn_more;
-    var backbutton = scoreBoard.querySelector('button');
-    backbutton.addEventListener('click', function(){quizEl.className = 'modules-overview'});
 }
 
 function drawQuestion () {
@@ -154,11 +145,14 @@ function drawQuestion () {
     questionEl.dataset.currentQuestion = 'true';
 
     questionHints = [];
-    questionTimer = setInterval(function(){ nextHint()}, 5000);
-    questionEl.querySelector('.prompt').innerHTML = `<span class="avatar">🤷</span> <blockquote>${question.prompt}</blockquote>`;
-    document.querySelector('#module-questions').appendChild(questionEl);    
+    questionTimer = setInterval( function(){ 
+        nextHint();
+        document.querySelectorAll('output')[currentQuestion].textContent = questionPoints;
+        
+    }, 5000);
 
-    
+    questionEl.querySelector('.prompt').innerHTML = `<span class="avatar">🤷</span> <blockquote>${question.prompt}</blockquote>`;
+    document.querySelector('#module-questions').appendChild(questionEl);
 
     let responseForm = questionEl.querySelector('form');
     let responseFieldSet = responseForm.querySelector('fieldset.responses');
@@ -167,7 +161,10 @@ function drawQuestion () {
     
     responseForm.addEventListener('submit', handleResponseSubmit);
     responseForm.querySelector('button[type=button]').addEventListener('click', prevQuestion);
-    (responseForm.querySelector('label')).focus();
+
+    let firstInput = responseForm.querySelector('label input');
+    firstInput.focus();
+
 }
 
 function drawResponse (question) {
@@ -177,9 +174,8 @@ function drawResponse (question) {
         return response.correct == true;
     });
 
-    console.log("options: ", question.responses.length)
-    
-    console.log("correct: ", corrects);
+    // console.log("options: ", question.responses.length)
+    // console.log("correct: ", corrects);
 
     // if only one valid response, draw text input
     if(question.responses.length === 1) {
@@ -238,7 +234,6 @@ function handleResponseSubmit(e) {
                     input.parentNode.className = 'error';   
                     input.checked = false;
                     input.disabled = "disabled";
-                    console.log(input)
                 }
                 if(input.type == 'text') {
                     input.parentNode.className = 'error';
@@ -251,27 +246,72 @@ function handleResponseSubmit(e) {
         
     } else {
         playSound('score');
-        // TODO: save actual response and calculate score every time
-        let points;
-        points = currentModule.questions[currentQuestion].points - (currentModule.questions[currentQuestion].hint_value * questionHints.length);
-        awardRemainingPoints(points);
+        awardRemainingPoints();
         nextQuestion();
     }
 }
 
-function awardRemainingPoints(points) {
-    questionPoints[currentQuestion] = points;
-    userScore = questionPoints.reduce((a,b) => a+b, 0);
-    (document.querySelector('.score')).textContent = userScore;
+function awardRemainingPoints() {
+
+    let points;
+    points = currentModule.questions[currentQuestion].points - (currentModule.questions[currentQuestion].hint_value * questionHints.length);
+    questionPoints = points;
+    
+    modulePoints[currentQuestion] = points;
+
+    scoreBoard[currentModuleTitle] = {
+       'score' : modulePoints
+    };
+    
+    var score = 0;
+    for(module in scoreBoard){
+        score += scoreBoard[module].score.reduce((a,b) => a+b, 0);
+    }
+    userScore = score;
+
+}
+
+function displayModuleScore() {
+    quizEl.className = 'module-score';
+
+    let availableModulePoints = [];
+    currentModule.questions.forEach(q => availableModulePoints.push(q.points));
+    availableModulePoints = availableModulePoints.reduce((a,b) => a+b, 0);
+    let modulePoints = scoreBoard[currentModuleTitle].score.reduce((a,b) => a+b, 0);
+    
+    let scoreBoardEl = document.querySelector('#module-score');
+    scoreBoardEl.querySelector('.points').textContent = modulePoints;
+    
+    
+    scoreBoardEl.querySelector('h2').textContent = `That's ${(modulePoints / availableModulePoints) * 100}% 
+     ${((modulePoints / availableModulePoints) * 100) > 75 ? '🤩 Well done!' : '🤨 Could do better..'}`;
+
+    scoreBoardEl.querySelector('pre').textContent = currentModule.learn_more;
+    
+    var backbutton = scoreBoardEl.querySelector('button');
+    backbutton.addEventListener('click', function(){
+        // maybe transition this nicely, like 'ca-ching!' before 
+        // transitioning back to module overview
+        playSound('click');
+        (document.querySelector('.score')).textContent = userScore;
+        drawModuleOverview();
+        quizEl.className = 'modules-overview';
+    });
 }
 
 function nextHint() {
     if (currentModule.questions[currentQuestion] && questionHints.length < currentModule.questions[currentQuestion].hints.length) {
+        // reduce points for showing hint
         questionHints.push(currentModule.questions[currentQuestion].hints[questionHints.length]);
+        awardRemainingPoints();
     } else {
         clearInterval(questionTimer);
+        playSound('error');
+        questionHints.push('⏱ Time up.');
+        awardRemainingPoints();
     }
     
+
     // brrr
     var hints = ''; 
     questionHints.forEach(item => { hints += `<li>${item}</li>` });

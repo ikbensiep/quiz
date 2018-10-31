@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="./styles/shell.css">
     <title>Quiz</title>
 </head>
-<body>
+<body unresolved>
     <header>
         <h1>
             <span class="quiz-title"></span>
@@ -55,7 +55,10 @@
     <article style="display:none" id="templates">
         <section class="module-questions">
             <div class="question">
-                <div class="timer">1500</div>
+                <div class="timer">
+                    <progress max="1000" value="1000"></progress>
+                    <output>1000</output>
+                </div>
                 <div class="prompt"></div>
                 
                 <form class="response" action="#">
