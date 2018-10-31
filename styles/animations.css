@@ -14,3 +14,9 @@
         opacity: 1;
     }
 } 
+
+@keyframes scoreboard {
+    from {
+        background-position: 0 0;
+    }
+}
