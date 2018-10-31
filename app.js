@@ -192,7 +192,10 @@ function drawResponse (question) {
             index++;
             let responseLabel = document.createElement('label');
             responseLabel.setAttribute('for', `question-${currentQuestion}-${index}`);
-            responseLabel.innerHTML = `<input type="${inputtype}" value="${response.text}" id="question-${currentQuestion}-${index}" name="question-${currentQuestion}"> ${response.text} <span class="feedback"></span>`
+            responseLabel.innerHTML = `
+                <input type="${inputtype}" value="${response.text}" id="question-${currentQuestion}-${index}" name="question-${currentQuestion}"> 
+                    <span class="text-label">${response.text}</span> <span class="feedback">
+                </span>`;
             output.appendChild(responseLabel);
         }
     }
