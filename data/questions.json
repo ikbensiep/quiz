@@ -16,8 +16,8 @@
                         {"text": "Open chequings account", "correct": true}
                     ],
                     "hints": ["🚐 sneller", "🧢 HEY", "🚬 ok"],
-                    "hint_value": 250,
-                    "points": 1000
+                    "hint_value": 1000,
+                    "points": 3000
                 },
                 {
                     "prompt": "What is the phone number you would call at the Facilities Help Desk?",
@@ -32,9 +32,9 @@
                     "prompt": "💥 You've got a problem, and no-one else can help. Maybe you should call...",
                     "responses": [
                         {"text": "The A-team","correct": true}, 
-                        {"text": "Batman", "correct": true},
-                        {"text": "McGyver", "correct": true},
-                        {"text": "El Barto", "correct": true}
+                        {"text": "Batman", "correct": false, "feedback": "No solo guys"},
+                        {"text": "McGyver", "correct": false, "feedback": "No solo guys"},
+                        {"text": "El Barto", "correct": false, "feedback": "Hanibal, Murdock, Faceman, Mr. T."}
                     ],
                     "hints": ["🚐 A team of highly trained commandos", "🧢 Escaped prison in 1972", "🚬 Love it when plans come together"],
                     "hint_value": 250,
@@ -55,10 +55,10 @@
                 {
                     "prompt": "🎤 You can call me..",
                     "responses": [
-                        {"text": "anytime"},
+                        {"text": "anytime", "correct": true},
                         {"text": "Al", "correct": true},
-                        {"text": "tomorrow"},
-                        {"text": "Joe"}
+                        {"text": "Buddy guard", "correct": false, "feedback":"see what I did there?"},
+                        {"text": "Joe", "correct": false, "feedback": "It's not Joe"}
                         
                     ],
                     "hints": ["🎷 Simon & Garfunkel", "💿 Graceland", "🏆 MTV Video Music Award (Best Male Video)"],
