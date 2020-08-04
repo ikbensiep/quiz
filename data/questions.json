@@ -4,30 +4,10 @@
         {
             "title": "1980s",
             "icon": "person",
-            "scenario": "Let's say...",
-            "media": "../media/1980s.mp4",
+            "scenario": "Intro video",
+            "media": "[../media/1980s.mp4]",
             "learn_more": "http://wikipedia.org/wiki/1984",
             "questions": [
-                {
-                    "prompt": "Select each search term that will yield succesful results",
-                    "responses": [
-                        {"text": "Where is the closest burger resto", "correct": false, "feedback": "Shortened or slang words like 'resto' will not produce good results. Also, Google is still the best tool for finding non TD related things like where to eat."},
-                        {"text": "How to handle diff custo's", "correct": false, "feedback": "Shortened or slang words like 'diff' or 'custo' will not produce good results."},
-                        {"text": "Open chequings account", "correct": true}
-                    ],
-                    "hints": ["🚐 sneller", "🧢 HEY", "🚬 ok"],
-                    "hint_value": 1000,
-                    "points": 3000
-                },
-                {
-                    "prompt": "What is the phone number you would call at the Facilities Help Desk?",
-                    "responses": [{
-                        "text": "555-416-4357", "correct": true, "feedback": "It starts with 555-416, the central phone number. On a dialpad, the extension (4357) can be read out as HELP."
-                    }],
-                    "hints": ["555-...", "555-416-...", "555-416-4357"],
-                    "hint_value": 250,
-                    "points": 1000
-                },
                 {
                     "prompt": "💥 You've got a problem, and no-one else can help. Maybe you should call...",
                     "responses": [
@@ -82,8 +62,8 @@
         {
             "title": "1990s",
             "icon": "casino",
-            "scenario": "Let's say...",
-            "media": "../media/1980s.mp4",
+            "scenario": "Intro video",
+            "media": "../media/1990s.mp4",
             "learn_more": "http://wikipedia.org/wiki/1984",
             "questions": [
                 {

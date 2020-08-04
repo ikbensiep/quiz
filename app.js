@@ -286,7 +286,7 @@ function displayModuleScore() {
     scoreBoardEl.querySelector('.points').textContent = modulePoints;
     
     
-    scoreBoardEl.querySelector('h2').textContent = `That's ${(modulePoints / availableModulePoints) * 100}% 
+    scoreBoardEl.querySelector('h2').textContent = `That's ${Math.ceil((modulePoints / availableModulePoints) * 100)}% 
      ${((modulePoints / availableModulePoints) * 100) > 75 ? '🤩 Well done!' : '🤨 Could do better..'}`;
 
     scoreBoardEl.querySelector('pre').textContent = currentModule.learn_more;
